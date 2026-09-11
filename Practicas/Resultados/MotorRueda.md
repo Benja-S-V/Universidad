@@ -20,7 +20,7 @@ Se validó la respuesta del sistema en tiempo real a través del Monitor Serie c
 | **`PARA`** | `IN3` = LOW, `IN4` = LOW, `EN` = 0 | Freno total del motor | **OK** |
 
 > **Evidencia Visual:**  
-> ![Esquema del Circuito](Practicas/Diagrama/MotorRuedaImagen2.jpeg)  
+> ![Esquema del Circuito](MotorRuedaImagen2.jpeg)  
 > *(Sustituye este enlace por el nombre exacto de tu archivo de captura dentro de la carpeta).*
 
 ---
