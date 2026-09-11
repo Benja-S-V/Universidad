@@ -37,6 +37,3 @@ El código grabado en el Arduino UNO R4 WiFi establece la comunicación serie a 
 
 **Resultados y Conclusiones**
 El montaje físico funcionó de manera óptima. La tarjeta Arduino UNO R4 WiFi procesó en tiempo real los comandos enviados desde el Monitor Serie a 115200 baudios. El uso de la fuente regulada a 12V otorgó al motor el torque necesario para realizar transiciones suaves y respuestas inmediatas en las variaciones de PWM. La disposición lógica del circuito sobre el canal central del protoboard y la correcta unificación del plano de tierra (GND) garantizaron la estabilidad general del sistema sin interferencias.
-
-**Resultados y Conclusiones**
-El montaje físico funcionó correctamente. La tarjeta Arduino UNO R4 WiFi respondió de forma inmediata a la lectura de comandos en el Monitor Serie a 115200 baudios. La integración de la fuente de poder permitió sostener los cambios bruscos de giro y los distintos niveles de velocidad (PWM) sin experimentar caídas de voltaje. Finalmente, organizar el L293D sobre la canaleta central de la protoboard unificando las tierras aseguró una señal de control limpia y un rendimiento óptimo del puente H.
