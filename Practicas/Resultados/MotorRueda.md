@@ -21,7 +21,7 @@ Se validó la respuesta del sistema en tiempo real a través del Monitor Serie c
 
 > **Evidencia Visual:**  
 >![Diagrama del Circuito](../Diagrama/MotorRuedaImagen2.jpeg)
-> *(Sustituye este enlace por el nombre exacto de tu archivo de captura dentro de la carpeta).*
+
 
 ---
 
