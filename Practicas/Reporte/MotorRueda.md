@@ -7,11 +7,11 @@ Implementar y validar físicamente el control bidireccional y de velocidad de un
 * Tarjeta de desarrollo Arduino UNO R4 WiFi
 * Circuito integrado L293D (Puente H)
 * Motor de corriente continua (CC)
-* Fuente de poder de CC (Alimentación externa de potencia)
+* Fuente de poder de CC regulada (Línea de 12V)
 * Protoboard y cables de conexión (Jumpers)
 
-**Justificación del Uso de Fuente de Poder**
-Se descartó el uso de una pila estándar de 9V debido a su baja capacidad de suministro de corriente. Los motores de CC generan picos de consumo (especialmente en el arranque o cambios de velocidad) que provocan caídas severas de tensión en pilas comunes. Al utilizar una fuente de poder dedicada para el pin 8 (VCC2) del L293D, se garantizó un suministro de energía constante y estable, evitando la pérdida de torque en el motor y protegiendo la lógica del circuito de fluctuaciones eléctricas.
+**Justificación de la Fuente de Alimentación**
+Para la etapa de potencia del motor (Pin 8 / VCC2 del L293D), se optó por implementar una fuente de poder regulada de 12V (línea amarilla) en lugar de una batería comercial. Esta decisión de diseño responde a la necesidad de suministrar el voltaje nominal óptimo para maximizar el torque y la respuesta dinámica del motor en cambios bruscos de sentido y aceleración (PWM). Asimismo, la fuente garantiza una corriente constante sin caídas de tensión por resistencia interna, aislando la etapa de potencia para evitar fluctuaciones en la línea lógica del Arduino UNO R4 WiFi.
 
 **Esquema de Conexiones Físicas**
 
@@ -22,11 +22,11 @@ Se descartó el uso de una pila estándar de 9V debido a su baja capacidad de su
 | **Arduino UNO R4 WiFi** | Pin 5 | Pin 15 (IN4) | Dirección de giro 2 |
 | **Arduino UNO R4 WiFi** | 5V | Pin 16 (VCC1) | Alimentación lógica del chip |
 | **Arduino / Fuente** | GND / Negativo (-) | Pines 4, 5, 12, 13 | Tierra común del circuito |
-| **Fuente de poder** | Positivo (+) | Pin 8 (VCC2) | Fuente externa para el motor |
+| **Fuente de Poder (12V)** | Positivo (+) / Cable Amarillo | Pin 8 (VCC2) | Alimentación de potencia para el motor |
 | **Motor CC** | Terminales 1 y 2 | Pines 11 y 14 | Salidas de potencia (OUT3 y OUT4) |
 
 **Lógica de Control y Comandos Serie**
-El código grabado en el Arduino UNO R4 WiFi establece la comunicación serie a **115200 baudios** para asegurar una lectura rápida de los datos. El microcontrolador ejecuta las siguientes acciones al recibir cada comando:
+El código grabado en el Arduino UNO R4 WiFi establece la comunicación serie a **115200 baudios** para asegurar una transmisión y lectura de datos con latencia mínima. El microcontrolador ejecuta las siguientes acciones al recibir cada comando:
 
 * **`ADELANTE`**: Activa `IN3` en ALTO y `IN4` en BAJO para hacer girar el motor en sentido horario.
 * **`RETROCEDE`**: Invierte las señales (`IN3` en BAJO e `IN4` en ALTO) para girar en sentido antihorario.
@@ -34,6 +34,9 @@ El código grabado en el Arduino UNO R4 WiFi establece la comunicación serie a 
 * **`LENTO`**: Modula la señal PWM del Pin 3 a un valor de **100** (~40% de potencia).
 * **`MEDIO`**: Modula la señal PWM del Pin 3 a un valor de **180** (~70% de potencia).
 * **`RAPIDO`**: Aplica el ciclo de trabajo máximo en PWM con valor de **255** (100% de potencia).
+
+**Resultados y Conclusiones**
+El montaje físico funcionó de manera óptima. La tarjeta Arduino UNO R4 WiFi procesó en tiempo real los comandos enviados desde el Monitor Serie a 115200 baudios. El uso de la fuente regulada a 12V otorgó al motor el torque necesario para realizar transiciones suaves y respuestas inmediatas en las variaciones de PWM. La disposición lógica del circuito sobre el canal central del protoboard y la correcta unificación del plano de tierra (GND) garantizaron la estabilidad general del sistema sin interferencias.
 
 **Resultados y Conclusiones**
 El montaje físico funcionó correctamente. La tarjeta Arduino UNO R4 WiFi respondió de forma inmediata a la lectura de comandos en el Monitor Serie a 115200 baudios. La integración de la fuente de poder permitió sostener los cambios bruscos de giro y los distintos niveles de velocidad (PWM) sin experimentar caídas de voltaje. Finalmente, organizar el L293D sobre la canaleta central de la protoboard unificando las tierras aseguró una señal de control limpia y un rendimiento óptimo del puente H.
