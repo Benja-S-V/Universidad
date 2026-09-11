@@ -20,7 +20,7 @@ Se validó la respuesta del sistema en tiempo real a través del Monitor Serie c
 | **`PARA`** | `IN3` = LOW, `IN4` = LOW, `EN` = 0 | Freno total del motor | **OK** |
 
 > **Evidencia Visual:**  
-> [Ver o Descargar Reporte en PDF](../Reporte/Reporte_Practica_Control_MotorRueda_L293D.pdf)  
+> [Ver o Descargar Reporte](..Practicas/Diagrama/MotorRueda.png)  
 > *(Sustituye este enlace por el nombre exacto de tu archivo de captura dentro de la carpeta).*
 
 ---
