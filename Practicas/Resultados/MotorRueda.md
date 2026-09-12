@@ -52,4 +52,4 @@ El montaje se realizó sobre protoboard aplicando estándares de cableado estruc
 El video de demostración muestra el cambio de sentido de giro y la variación gradual de velocidad al enviar las instrucciones desde la terminal:
 
 * **Demostración en Video / GIF:** `![Video Demostrativo](Demostracion_Funcionamiento.gif)`
-* **Enlace Externo (Opcional):** [Ver Video Completo de Pruebas](https://youtube.com)
+* **Enlace Externo (Opcional):** [Ver Video Completo de Pruebas]((https://youtube.com/shorts/whfj_7Ri47Q?feature=share))
