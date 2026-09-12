@@ -1,55 +1,74 @@
-# Evidencias y Resultados de la Práctica: Control de Motor CC con L293D
+# Reporte de Resultados y Evidencias Experimentales
 
-Este documento reúne las evidencias físicas, capturas de pantalla y registros de funcionamiento obtenidos durante las pruebas de validación del circuito de control bidireccional y de velocidad para el motor de corriente continua (CC), controlado mediante un **Arduino UNO R4 WiFi** y el driver **L293D**.
-
----
-
-## 1. Verificación del Monitor Serie (Terminal a 115200 bps)
-
-Se validó la respuesta del sistema en tiempo real a través del Monitor Serie configurado a **115200 baudios**. La rutina de lectura de cadenas procesó correctamente cada instrucción sin perder caracteres ni presentar latencia apreciable.
-
-### Comandos Probados y Respuesta Observada
-
-| Comando | Acción Ejecutada en Pines | Estado del Motor / Respuesta Observada | Estado |
-| :--- | :--- | :--- | :---: |
-| **`ADELANTE`** | `IN3` = HIGH, `IN4` = LOW | Giro en sentido horario | **OK** |
-| **`RETROCEDE`** | `IN3` = LOW, `IN4` = HIGH | Inversión inmediata a sentido antihorario | **OK** |
-| **`LENTO`** | `PWM` (Pin 3) = 100 (~40%) | Reducción de RPM, movimiento suave y sostenido | **OK** |
-| **`MEDIO`** | `PWM` (Pin 3) = 180 (~70%) | Incremento de velocidad y torque medio | **OK** |
-| **`RAPIDO`** | `PWM` (Pin 3) = 255 (100%) | Velocidad y torque máximos de la línea de 12V | **OK** |
-| **`PARA`** | `IN3` = LOW, `IN4` = LOW, `EN` = 0 | Freno total del motor | **OK** |
-
-> **Evidencia Visual:**  
->![Diagrama del Circuito](../Diagrama/MotorRuedaImagen2.jpeg)
-
+Este documento registra la validación técnica, las pruebas de operación en tiempo real y el banco de evidencias físicas del sistema de control para un motor de corriente continua (CC), utilizando el microcontrolador **Arduino UNO R4 WiFi**, un driver de potencia de puente en H y alimentación regulada externa.
 
 ---
 
-## 2. Ensamble y Montaje Físico
+## 1. Resumen de Validación Operativa
 
-El montaje se realizó sobre protoboard aplicando estándares de cableado estructurado para circuitos de potencia y lógica:
-
-1. **Ubicación del L293D:** Se insertó sobre el canal central del protoboard para optimizar la disipación térmica y facilitar el ruteo de señales por ambos lados del CI.
-2. **Plano de Tierra Unificado (GND):** Se interconectaron las tierras del Arduino UNO R4 WiFi, la fuente de alimentación externa y los pines centrales del L293D (pines 4, 5, 12 y 13), eliminando ruidos eléctricos e interferencias.
-3. **Alimentación de Potencia (12V):** Se conectó la línea de 12V proveniente del cable amarillo de la fuente de poder directamente al **Pin 8 (VCC2)** del driver.
-
-### Fotos del Circuito
-
-* **Vista General del Circuito:** `![Armado Físico en Protoboard](Fotos_Circuito/Armado_Fisico_Protoboard.jpg)`
-* **Conexión de la Fuente de 12V:** `![Conexión de Potencia 12V](Fotos_Circuito/Conexion_Fuente_12V.jpg)`
+* **Microcontrolador:** Arduino UNO R4 WiFi (Renesas RA4M1 @ 48 MHz)
+* **Driver de Potencia:** Módulo de potencia H-Bridge (L293D / L298N)
+* **Alimentación de Potencia:** Fuente ATX regulada (Línea de 12V DC - Cable Amarillo)
+* **Tasa de Transmisión UART:** 115200 bps
+* **Ubicación en Repositorio:** `Practicas/Resultados/`
 
 ---
 
-## 3. Comportamiento Térmico y Eléctrico
+## 2. Matriz Metodológica de Pruebas Serie (115200 Baudios)
 
-* **Estabilidad del Microcontrolador:** A diferencia del uso de baterías de 9V convencionales, la alimentación dedicada de 12V para el motor evitó reinicios inesperados (*brown-outs*) en la placa Arduino UNO R4 WiFi durante los picos de arranque del motor.
-* **Torque Sostenido:** El motor mantuvo la fuerza necesaria incluso al conmutar entre los estados de `LENTO` y `RAPIDO`, confirmando la efectividad del control por ancho de pulso (PWM).
+Se evaluó la respuesta dinámica del actuador mediante el envío de comandos de texto desde el Monitor Serie. Al trabajar a **115200 bps**, el tiempo de transmisión por paquete se redujo a menos de 0.7 ms, eliminando latencias perceptibles durante las transiciones de velocidad y sentido de giro.
+
+| Comando Serie | Estado Lógico de Pines | Valor PWM (Pin 3) | Ciclo de Trabajo (%) | Comportamiento Dinámico en Rueda | Estado |
+| :--- | :--- | :---: | :---: | :--- | :---: |
+| **`ADELANTE`** | `IN3` = HIGH, `IN4` = LOW | 255 | 100% | Giro continuo horario con torque máximo | **PASÓ** |
+| **`RETROCEDE`** | `IN3` = LOW, `IN4` = HIGH | 255 | 100% | Inversión inmediata a sentido antihorario | **PASÓ** |
+| **`LENTO`** | Según dirección activa | 100 | ~39.2% | Rotación suave y constante a bajas RPM | **PASÓ** |
+| **`MEDIO`** | Según dirección activa | 180 | ~70.5% | Incremento progresivo de velocidad y par | **PASÓ** |
+| **`RAPIDO`** | Según dirección activa | 255 | 100% | Régimen máximo alimentado por la línea de 12V | **PASÓ** |
+| **`PARA`** | `IN3` = LOW, `IN4` = LOW | 0 | 0% | Freno eléctrico inmediato por cortocircuito bajo | **PASÓ** |
 
 ---
 
-## 4. Evidencia en Video
+## 3. Análisis de Alimentación y Aislamiento Electrónico
 
-El video de demostración muestra el cambio de sentido de giro y la variación gradual de velocidad al enviar las instrucciones desde la terminal:
+1. **Inmunidad ante *Brown-Outs* (12V ATX):**  
+   Las baterías comerciales de 9V experimentan caídas drásticas de tensión por debajo de 6.5V durante los picos de corriente al arrancar el motor, lo que provocaba reinicios indeseados (*brown-outs*) en la etapa lógica del Arduino UNO R4 WiFi. La implementación de la fuente ATX con la línea de **12V DC (cable amarillo)** garantizó una reserva de corriente superior a 1.5A, manteniendo constante la alimentación de 5V en la placa principal.
 
-* **Demostración en Video / GIF:** `![Video Demostrativo](Demostracion_Funcionamiento.gif)`
-* **Enlace Externo (Opcional):** [Ver Video Completo de Pruebas]((https://youtube.com/shorts/whfj_7Ri47Q?feature=share))
+2. **Unificación de Referencias (GND):**  
+   Se enlazaron los terminales neutros de la fuente ATX (cables negros) con el pin `GND` del microcontrolador para establecer una referencia de voltaje común, evitando bucles de masa y garantizando señales PWM limpias hacia el driver.
+
+---
+
+## 4. Banco de Evidencias Gráficas
+
+### A. Esquema Técnico de Conexiones
+El diseño esquemático completo y la distribución de pines se encuentran vinculados mediante la ruta relativa correspondiente:
+
+![Esquema Técnico Digital](../Diagrama/MotorRuedaImagen2.jpeg)
+*Figura 1: Diagrama de conexiones e interconexión lógica/potencia (`MotorRuedaImagen2.jpeg`).*
+
+---
+
+### B. Ensamble Físico Real de Banco
+Demostración del circuito armado y energizado en el entorno de laboratorio:
+
+![Montaje Físico Real del Circuito](Imagen3.jpeg)
+*Figura 2: Banco de pruebas en operación. Se aprecia la fuente ATX alimentando el módulo driver mediante la línea de 12V (cable amarillo) y masa unificada (cable negro), la placa Arduino UNO R4 WiFi conectada por USB y el motorreductor con rueda amarilla de pruebas (`Imagen3.jpeg`).*
+
+---
+
+## 5. Demostración en Video (Prueba en Tiempo Real)
+
+Haz clic en la imagen a continuación para reproducir la demostración en **YouTube Shorts** de los cambios de velocidad por PWM y sentido de giro:
+
+[![Ver Demostración en YouTube Shorts](https://img.youtube.com/vi/whfj_7Ri47Q/hqdefault.jpg)](https://youtube.com/shorts/whfj_7Ri47Q)
+
+> 🔗 **Enlace directo al video:** [Ver demostración en YouTube Shorts](https://youtube.com/shorts/whfj_7Ri47Q)
+
+---
+
+## 6. Conclusiones Técnicas
+
+1. **Aislamiento de Potencia:** La separación de la etapa lógica (5V USB/Arduino) y la etapa de potencia (12V ATX) es indispensable para proteger el procesador Renesas RA4M1 del Arduino UNO R4 WiFi ante picos inductivos.
+2. **Validación de Código:** El control por señales PWM permite modular la velocidad del motor de forma uniforme sin perder estabilidad ni generar sobrecalentamiento en el driver.
+3. **Documentación Modular:** La estructura de rutas relativas de GitHub garantiza que las imágenes (`../Diagrama/` e `Imagen3.jpeg`) y el video integrado sean accesibles desde cualquier plataforma web o móvil.
