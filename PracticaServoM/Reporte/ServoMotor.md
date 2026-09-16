@@ -29,7 +29,7 @@ Implementar y validar un sistema de control remoto para posicionar un servomotor
 | **ENERGÍA (Rojo)** | 5V | Alimentación de potencia |
 
 ### Evidencia de Conexión
-![Circuito Electrónico](../Diagrama/image1.jpeg)
+![Circuito Electrónico](../Diagrama/image2.jpeg)
 
 ---
 
@@ -38,7 +38,7 @@ Implementar y validar un sistema de control remoto para posicionar un servomotor
 El sistema funciona completamente. Las conexiones con jumpers entre el Arduino y el servomotor están correctamente establecidas y garantizan la transmisión estable de la señal. El Monitor Serie de Arduino muestra exitosamente la dirección IP asignada a la página web alojada en el microcontrolador (Arduino UNO R4 WiFi). La página web responde correctamente y refleja en tiempo real los cambios de ángulo del servomotor.
 
 ### Evidencia de Funcionamiento e Interfaz Web
-![Interfaz Web en Laptop](../Diagrama/image2.jpeg)
+![Interfaz Web en Laptop](../Diagrama/image1.jpeg)
 
 ---
 
