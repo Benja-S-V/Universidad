@@ -80,7 +80,7 @@ peatonal, el ciclo del semáforo continuaba funcionando de manera automática.
 El video muestra el funcionamiento del semáforo vehicular y peatonal, incluyendo la 
 respuesta del sistema ante la solicitud de cruce mediante el botón.
 
-[Ver video](https://youtu.be/XfsUzSpZSHo)
+[Ver video](https://youtu.be/vnheUGrvVsk)
 
 [Ver carpeta Video](https://github.com/Benja-S-V/Universidad/blob/main/PracticaSemaforoLeds/Video)
 
