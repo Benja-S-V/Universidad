@@ -26,6 +26,8 @@ sistema realiza simultáneamente una animación en la matriz de LEDs integrada.
 El diagrama muestra las conexiones utilizadas para implementar el sistema de interrupciones 
 con buffer circular.
 
+![Diagrama de conexiones](Diagrama/DiagramaInterrupciones.jpeg)
+
 ### Evidencia del circuito físico
 
 ![Vista general del montaje](Diagrama/ImageInterrupciones1.jpeg)
@@ -44,13 +46,13 @@ pulsación, la ISR anota el evento en el buffer circular y regresa de inmediato.
 lee los eventos pendientes del buffer y los muestra en el Monitor Serial, mientras ejecuta 
 la animación de la matriz de LEDs de forma continua.
 
-[Ver código](https://github.com/Benja-S-V/Universidad/blob/main/PracticaInterrupciones/Codigo/CodigoInterrupciones.ino)
+[Ver código](https://github.com/Benja-S-V/Universidad/blob/main/PracticaInterrupciones/Codigo)
 
 ## Reporte
 El reporte contiene la explicación del funcionamiento del sistema, la metodología utilizada, 
 el análisis de los resultados y las conclusiones obtenidas durante la práctica.
 
-[Ver Reporte](https://github.com/Benja-S-V/Universidad/blob/main/PracticaInterrupciones/Reporte/Reporte_PracticaInterrupciones.pdf)
+[Ver Reporte](https://github.com/Benja-S-V/Universidad/blob/main/PracticaInterrupciones/Reporte)
 
 ## Resultados
 Durante las pruebas, el sistema detectó y registró correctamente el 100% de las pulsaciones, 
@@ -62,7 +64,7 @@ durante toda la sesión, confirmando que las dos tareas coexistieron sin bloquea
 El Monitor Serial mostró el conteo acumulado de piezas detectadas con su timestamp correspondiente 
 en milisegundos.
 
-[Ver carpeta Resultados](https://github.com/Benja-S-V/Universidad/blob/main/PracticaInterrupciones/Resultados/Resultados_PracticaInterrupciones.pdf)
+[Ver carpeta Resultados](https://github.com/Benja-S-V/Universidad/blob/main/PracticaInterrupciones/Resultados)
 
 ## Video
 El video muestra el funcionamiento del sistema de interrupciones, incluyendo la detección 
