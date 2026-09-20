@@ -1,61 +1,99 @@
-# Práctica : Semáforo Vehicular y Peatonal con FSM
+# Semáforo Vehicular y Peatonal con Máquina de Estados Finitos
 
-Sistema de control no bloqueante para un semáforo vehicular y peatonal interactivo utilizando una **Máquina de Estados Finitos (FSM)** en Arduino.
+## Descripción
+Esta práctica implementa el control de un semáforo vehicular y peatonal mediante una 
+máquina de estados finitos (FSM) programada en Arduino UNO R4 WiFi.
 
----
+El sistema cuenta con luces vehiculares de color rojo, amarillo y verde, luces peatonales 
+de color rojo y verde, y un botón para solicitar el cruce peatonal. La temporización del 
+sistema se realiza mediante `millis()`, sin utilizar `delay()`, permitiendo que el programa 
+responda a eventos externos mientras mantiene el funcionamiento del semáforo.
 
-## 📌 Descripción
-Este proyecto implementa la lógica de tránsito vehicular y peatonal prioritaria. La secuencia gestiona el paso de vehículos y atiende las solicitudes de paso peatonal activadas por un pulsador, empleando un filtro antirrebote (*debounce*) por software.
+## Objetivos
 
-Toda la temporización del sistema utiliza la función nativa `millis()` en lugar de `delay()`, garantizando un flujo no bloqueante y multitarea reactiva.
+* Comprender el funcionamiento de una máquina de estados finitos (FSM).
+* Implementar un sistema secuencial mediante diferentes estados.
+* Controlar las luces de un semáforo vehicular y peatonal.
+* Utilizar `millis()` para realizar una temporización no bloqueante.
+* Implementar un botón para solicitar el cruce peatonal.
+* Utilizar antirrebote por software para evitar activaciones falsas.
+* Establecer reglas de prioridad para atender la solicitud peatonal de manera segura.
 
----
+## Herramientas y material utilizado
 
-## 🛠️ Materiales
-* 1x Placa Arduino UNO (R3 / R4)
-* 1x Protoboard
-* 5x LEDs (Rojo, Amarillo, Verde Vehicular; Rojo, Verde Peatonal)
-* 5x Resistencias de 220 Ω
-* 1x Pulsador (*Pushbutton*)
-* Cables de conexión (*jumpers*)
+* Arduino UNO R4 WiFi.
+* Arduino IDE.
+* Protoboard.
+* LED rojo vehicular.
+* LED amarillo vehicular.
+* LED verde vehicular.
+* LED rojo peatonal.
+* LED verde peatonal.
+* Resistencias limitadoras de corriente.
+* Pulsador para la solicitud peatonal.
+* Cables de conexión (jumpers).
 
----
+## Diagrama
+El diagrama muestra las conexiones utilizadas para implementar el semáforo vehicular 
+y peatonal.
 
-## 🔌 Mapeo de Pines y Conexiones
+![Diagrama de conexiones](Diagrama/SemaforoLed.png)
 
-| Componente | Pin Arduino | Configuración / Topología |
-| :--- | :--- | :--- |
-| **Pulsador Peatonal** | Pin 2 | Entrada con `INPUT_PULLUP` interno (Conectado a GND) |
-| **LED Peatonal Rojo** | Pin 6 | Salida Digital (Cátodo con Resistencia 220 Ω a GND) |
-| **LED Peatonal Verde** | Pin 7 | Salida Digital (Cátodo con Resistencia 220 Ω a GND) |
-| **LED Vehicular Rojo** | Pin 8 | Salida Digital (Cátodo con Resistencia 220 Ω a GND) |
-| **LED Vehicular Amarillo** | Pin 9 | Salida Digital (Cátodo con Resistencia 220 Ω a GND) |
-| **LED Vehicular Verde** | Pin 10 | Salida Digital (Cátodo con Resistencia 220 Ω a GND) |
+### Evidencia del circuito físico
 
----
+![Circuito armado 1](Diagrama/Image1.jpeg)
 
-## 🚦 Máquina de Estados (FSM)
+![Circuito armado 2](Diagrama/Image3.jpeg)
 
-El sistema utiliza la estructura `enum class EstadoSemaforo` con 4 estados principales:
+![Circuito armado 3](Diagrama/Image4.jpeg)
 
-1. **`VERDE_VEHICULO`**: Flujo vehicular encendido (Pin 10) y paso peatonal bloqueado (Pin 6). Permanece activo un mínimo de 5000 ms y hasta detectar una solicitud peatonal.
-2. **`AMARILLO_VEHICULO`**: Transición de advertencia vehicular (Pin 9) con duración de 2000 ms.
-3. **`VERDE_PEATON`**: Detención vehicular (Pin 8) y habilitación de paso peatonal (Pin 7) durante 4000 ms.
-4. **`PARPADEO_PEATON`**: Cierre de paso peatonal mediante intermitencia del LED verde a intervalos de 250 ms durante 2000 ms, antes de regresar al flujo vehicular.
+## Código
+El programa implementa la máquina de estados finitos encargada de controlar las luces 
+vehiculares y peatonales, así como la solicitud de cruce mediante el botón.
+La temporización se realiza mediante `millis()` para evitar bloquear la ejecución 
+del programa.
 
----
+[Ver código](https://github.com/Benja-S-V/Universidad/blob/main/PracticaSemaforoLeds/Codigo)
 
-## ⚙️ Tiempos de Configuración
-* **Verde Vehicular Mínimo:** 5000 ms
-* **Amarillo Vehicular:** 2000 ms
-* **Verde Peatonal:** 4000 ms
-* **Parpadeo Peatonal:** 2000 ms (250 ms por conmutación)
-* **Antirrebote (Debounce):** 50 ms
+## Reporte
+El reporte contiene la explicación del funcionamiento del sistema, la metodología utilizada, 
+el análisis de los resultados y las conclusiones obtenidas durante la práctica.
 
----
+[Ver Reporte](https://github.com/Benja-S-V/Universidad/blob/main/PracticaSemaforoLeds/Reporte/Reporte_Practica_Semaforo_FSM.pdf)
 
-## 🚀 Ejecución en Arduino IDE
-1. Abre el archivo `.ino` en Arduino IDE o Tinkercad.
-2. Selecciona la placa **Arduino Uno** y el puerto COM correspondiente.
-3. Configura el **Monitor Serie** a `115200 baudios` para observar las trazas de estado y registros de pulsación en tiempo real.
-4. Compila y carga el programa en la placa.
+## Resultados
+Durante las pruebas, el semáforo presentó el comportamiento esperado de acuerdo con la 
+máquina de estados finitos implementada. El ciclo vehicular de verde, amarillo y rojo se 
+ejecutó con las duraciones programadas mediante una temporización no bloqueante.
+
+El botón permitió realizar la solicitud de cruce peatonal durante los estados 
+correspondientes. La solicitud fue atendida de manera segura cuando el semáforo vehicular 
+llegó al estado rojo, permitiendo el cambio de las luces peatonales.
+
+También se comprobó el funcionamiento del antirrebote por software, evitando activaciones 
+falsas o múltiples debido a una sola pulsación del botón. Cuando no existía una solicitud 
+peatonal, el ciclo del semáforo continuaba funcionando de manera automática.
+
+[Ver carpeta Resultados](https://github.com/Benja-S-V/Universidad/blob/main/PracticaSemaforoLeds/Resultados)
+
+## Video
+El video muestra el funcionamiento del semáforo vehicular y peatonal, incluyendo la 
+respuesta del sistema ante la solicitud de cruce mediante el botón.
+
+[Ver video](https://youtu.be/XfsUzSpZSHo)
+
+[Ver carpeta Video](https://github.com/Benja-S-V/Universidad/blob/main/PracticaSemaforoLeds/Video)
+
+## Conclusiones
+La práctica permitió aplicar el concepto de máquina de estados finitos a un sistema de 
+control secuencial, utilizando diferentes estados para representar el comportamiento del 
+semáforo vehicular y peatonal.
+
+El uso de `millis()` permitió realizar la temporización sin bloquear la ejecución del 
+programa, mientras que el botón permitió incorporar un evento externo al funcionamiento 
+del sistema. También se comprendió la importancia del antirrebote y de establecer reglas 
+de prioridad para atender la solicitud peatonal de forma segura.
+
+En conjunto, la práctica permitió relacionar la programación de una máquina de estados 
+con el control de componentes físicos, comprobando su funcionamiento mediante el circuito 
+armado y las pruebas realizadas.
