@@ -50,7 +50,7 @@ la animación de la matriz de LEDs de forma continua.
 El reporte contiene la explicación del funcionamiento del sistema, la metodología utilizada, 
 el análisis de los resultados y las conclusiones obtenidas durante la práctica.
 
-[Ver Reporte](https://github.com/Benja-S-V/Universidad/blob/main/PracticaInterrupciones/Reporte)
+[Ver Reporte](https://github.com/Benja-S-V/Universidad/blob/main/PracticaInterrupciones/Reporte/Reporte_PracticaInterrupciones.pdf)
 
 ## Resultados
 Durante las pruebas, el sistema detectó y registró correctamente el 100% de las pulsaciones, 
