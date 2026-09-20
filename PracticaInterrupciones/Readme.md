@@ -62,7 +62,7 @@ durante toda la sesión, confirmando que las dos tareas coexistieron sin bloquea
 El Monitor Serial mostró el conteo acumulado de piezas detectadas con su timestamp correspondiente 
 en milisegundos.
 
-[Ver carpeta Resultados](https://github.com/Benja-S-V/Universidad/blob/main/PracticaInterrupciones/Resultados)
+[Ver carpeta Resultados](https://github.com/Benja-S-V/Universidad/blob/main/PracticaInterrupciones/Resultados/Resultados_PracticaInterrupciones.pdf)
 
 ## Video
 El video muestra el funcionamiento del sistema de interrupciones, incluyendo la detección 
