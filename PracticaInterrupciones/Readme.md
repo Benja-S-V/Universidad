@@ -44,7 +44,7 @@ pulsación, la ISR anota el evento en el buffer circular y regresa de inmediato.
 lee los eventos pendientes del buffer y los muestra en el Monitor Serial, mientras ejecuta 
 la animación de la matriz de LEDs de forma continua.
 
-[Ver código](https://github.com/Benja-S-V/Universidad/blob/main/PracticaInterrupciones/Codigo)
+[Ver código](https://github.com/Benja-S-V/Universidad/blob/main/PracticaInterrupciones/Codigo/CodigoInterrupciones.ino)
 
 ## Reporte
 El reporte contiene la explicación del funcionamiento del sistema, la metodología utilizada, 
