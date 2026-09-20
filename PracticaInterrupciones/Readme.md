@@ -1,87 +1,85 @@
-# PracticaInterrupciones — Interrupciones Externas y Buffers Circulares
+# Interrupciones Externas y Buffers Circulares
 
-**Materia:** Sistemas Programables  
-**Alumno:** Benjamín Salas Vizcarra  
-**Fecha:** Septiembre 2026
+## Descripción
+Esta práctica implementa un sistema de detección de eventos asíncronos en Arduino UNO R4 WiFi 
+usando interrupciones externas y un buffer circular (ring buffer). Un pulsador simula el sensor 
+de una banda transportadora industrial que detecta piezas en cualquier momento, mientras el 
+sistema realiza simultáneamente una animación en la matriz de LEDs integrada.
 
----
+## Objetivos
 
-## 📋 Descripción del Proyecto
+* Configurar y usar una interrupción externa para detectar eventos asíncronos.
+* Implementar un buffer circular para desacoplar la detección del procesamiento.
+* Aplicar un filtro de rebote (debounce) dentro de la ISR.
+* Demostrar que dos tareas pueden coexistir sin bloquearse mutuamente.
 
-Esta práctica implementa un sistema de detección de eventos asíncronos en Arduino UNO R4 WiFi usando **interrupciones externas** y un **buffer circular (ring buffer)**. Un pulsador simula el sensor de una banda transportadora industrial que detecta piezas en cualquier momento, mientras el sistema realiza simultáneamente una animación en la matriz de LEDs integrada.
+## Herramientas y material utilizado
 
----
+* Arduino UNO R4 WiFi.
+* Arduino IDE.
+* Pulsador táctil.
+* Resistencia de 10 kΩ (pull-down).
+* Protoboard.
+* Cables de conexión (jumpers).
 
-## 🎯 Objetivos
+## Diagrama
+El diagrama muestra las conexiones utilizadas para implementar el sistema de interrupciones 
+con buffer circular.
 
-- Configurar y usar una interrupción externa para detectar eventos asíncronos.
-- Implementar un buffer circular para desacoplar la detección del procesamiento.
-- Aplicar un filtro de rebote (debounce) dentro de la ISR.
-- Demostrar que dos tareas pueden coexistir sin bloquearse mutuamente.
+### Evidencia del circuito físico
 
----
+![Vista general del montaje](Diagrama/ImageInterrupciones1.jpeg)
 
-## 🛠️ Herramientas y Componentes
+![Detalle del pulsador en protoboard](Diagrama/ImageInterrupciones2.jpeg)
 
-| Componente | Descripción | Cantidad |
-|---|---|---|
-| Arduino UNO R4 WiFi | Microcontrolador con matriz LED integrada | 1 |
-| Pulsador táctil | Simula el sensor de piezas | 1 |
-| Resistencia 10 kΩ | Pull-down para el pin de interrupción | 1 |
-| Cables jumper | Conexiones en protoboard | varios |
-| Protoboard | Plataforma de prototipado | 1 |
-| Arduino IDE 2.x | Entorno de desarrollo y Monitor Serial | — |
+![Circuito completo en prueba](Diagrama/ImageInterrupciones3.jpeg)
 
----
+![Circuito funcionando con LED activo](Diagrama/Image4Interrupciones.jpeg)
 
-## 📁 Estructura del Repositorio
+![Monitor Serial — detección de piezas](Diagrama/Image5Interrupciones.jpeg)
 
----
+## Código
+El programa configura una interrupción externa en el pin del pulsador. Al detectar una 
+pulsación, la ISR anota el evento en el buffer circular y regresa de inmediato. El loop() 
+lee los eventos pendientes del buffer y los muestra en el Monitor Serial, mientras ejecuta 
+la animación de la matriz de LEDs de forma continua.
 
-## ⚙️ ¿Cómo funciona?
+[Ver código](https://github.com/Benja-S-V/Universidad/blob/main/PracticaInterrupciones/Codigo)
 
-### Interrupciones externas
-El pulsador está conectado a un pin de interrupción externa. Al presionarlo, el Arduino pausa momentáneamente lo que esté haciendo y salta a la ISR (Interrupt Service Routine), que anota el evento en el buffer circular y regresa de inmediato.
+## Reporte
+El reporte contiene la explicación del funcionamiento del sistema, la metodología utilizada, 
+el análisis de los resultados y las conclusiones obtenidas durante la práctica.
 
-### Buffer circular
-Es una estructura de tamaño fijo con dos índices: uno de escritura (ISR) y uno de lectura (loop()). Permite que ambas partes operen a ritmos distintos sin bloquearse. Cuando el loop() tiene un momento libre, lee los eventos pendientes y los muestra en el Monitor Serial.
+[Ver Reporte](https://github.com/Benja-S-V/Universidad/blob/main/PracticaInterrupciones/Reporte)
 
-### Filtro de rebote
-Dentro de la ISR se verifica que hayan pasado al menos 50 ms desde el último evento registrado, evitando duplicados por rebote mecánico del pulsador.
+## Resultados
+Durante las pruebas, el sistema detectó y registró correctamente el 100% de las pulsaciones, 
+incluso al presionar el botón de forma rápida y consecutiva con intervalos menores a 150 ms. 
+El filtro de rebote implementado dentro de la ISR evitó registros duplicados en todas las pruebas.
 
----
+La animación en la matriz de LEDs se ejecutó de forma continua y sin pausas perceptibles 
+durante toda la sesión, confirmando que las dos tareas coexistieron sin bloquearse mutuamente. 
+El Monitor Serial mostró el conteo acumulado de piezas detectadas con su timestamp correspondiente 
+en milisegundos.
 
-## 📸 Evidencia del circuito
+[Ver carpeta Resultados](https://github.com/Benja-S-V/Universidad/blob/main/PracticaInterrupciones/Resultados)
 
-### Vista general del montaje
-![Vista general](Diagrama/ImageInterrupciones1.jpeg)
+## Video
+El video muestra el funcionamiento del sistema de interrupciones, incluyendo la detección 
+de pulsaciones y la animación continua en la matriz de LEDs del Arduino.
 
-### Detalle del pulsador en protoboard
-![Detalle pulsador](Diagrama/ImageInterrupciones2.jpeg)
+[Ver video](https://youtu.be/683_3GgW0cs)
 
-### Circuito completo en prueba
-![Circuito completo](Diagrama/ImageInterrupciones3.jpeg)
+[Ver carpeta Video](https://github.com/Benja-S-V/Universidad/blob/main/PracticaInterrupciones/Video)
 
-### Circuito funcionando con LED activo
-![Circuito funcionando](Diagrama/Image4Interrupciones.jpeg)
+## Conclusiones
+La práctica permitió comprender el funcionamiento de las interrupciones externas como mecanismo 
+de detección inmediata de eventos asíncronos, sin necesidad de revisar constantemente el estado 
+del pin mediante polling.
 
-### Monitor Serial — detección de piezas
-![Monitor Serial](Diagrama/Image5Interrupciones.jpeg)
+El buffer circular demostró ser una estructura eficiente para desacoplar la detección del 
+procesamiento, permitiendo que la ISR escriba eventos a cualquier momento y que el loop() 
+los lea a su propio ritmo sin pérdidas ni bloqueos mutuos.
 
----
-
-## 📊 Resultados
-
-| Aspecto evaluado | Resultado |
-|---|---|
-| Detección sin pérdidas | 100% de eventos registrados |
-| Filtro de rebote | Sin duplicados detectados |
-| Animación continua | Sin pausas visibles |
-| Pulsaciones rápidas (< 150 ms) | Registradas correctamente |
-| Reset del buffer | Reinicio limpio confirmado |
-
----
-
-## ✅ Conclusión
-
-La combinación de interrupciones externas con buffer circular demostró ser una solución confiable para detectar eventos asíncronos sin perder ninguno, mientras el sistema mantiene otra tarea ejecutándose en paralelo sin interrupciones perceptibles.
+En conjunto, la práctica permitió aplicar un patrón de diseño utilizado en sistemas embebidos 
+reales, comprobando su funcionamiento mediante el circuito armado y las pruebas realizadas.
