@@ -9,6 +9,11 @@ común entre todos.
 - Esclavo 2 (0x09): recibe un ángulo del maestro y mueve un servomotor.
 - Esclavo 3 (0x0A): lee un potenciómetro y envía su valor al maestro cuando este lo pide.
 
+Al girar el potenciómetro, el Esclavo 3 envía el valor al maestro. El maestro lo convierte 
+a grados (0°–180°) y se los manda al Esclavo 2, que mueve el servo en tiempo real. 
+El maestro imprime en el Monitor Serie los grados actuales del servo cada 500 ms, 
+permitiendo ver en microsegundos cómo responde el servo al movimiento del potenciómetro.
+
 ## Objetivos de aprendizaje
 Comprender el funcionamiento del bus I2C mediante la comunicación entre un Arduino maestro
 y tres Arduinos esclavos, que comparten las líneas SDA y SCL y se identifican con direcciones
@@ -49,11 +54,20 @@ distintas (0x08, 0x09 y 0x0A).
 
 <img src="Diagrama/Image3.jpg" width="500">
 
+<img src="Diagrama/Image4.jpg" width="500">
+
+## Funcionamiento del servo con potenciómetro
+Al girar el potenciómetro, el Esclavo 3 lee el valor analógico (0–1023) y lo envía 
+al maestro a través del bus I2C. El maestro convierte ese valor a un ángulo entre 0° 
+y 180° usando la función map(), y se lo manda al Esclavo 2 para que mueva el servo 
+a esa posición. Todo esto ocurre cada 500 ms, permitiendo ver en el Monitor Serie 
+los grados en tiempo real mientras se gira el potenciómetro.
+
 ## Reporte
-[Ver Reporte](Reporte/)
+[Ver Reporte](Reporte/Reporte_Protocolo12C.pdf)
 
 ## Resultados
-[Ver Resultados](Resultados/)
+[Ver Resultados](Resultados/Resultados_Protocolo12C.pdf)
 
 ## Conclusiones
 El bus I2C permite comunicar varios dispositivos usando solo dos líneas (SDA y SCL) más
