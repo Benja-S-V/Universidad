@@ -56,12 +56,7 @@ distintas (0x08, 0x09 y 0x0A).
 
 <img src="Diagrama/Image4.jpg" width="500">
 
-## Funcionamiento del servo con potenciómetro
-Al girar el potenciómetro, el Esclavo 3 lee el valor analógico (0–1023) y lo envía 
-al maestro a través del bus I2C. El maestro convierte ese valor a un ángulo entre 0° 
-y 180° usando la función map(), y se lo manda al Esclavo 2 para que mueva el servo 
-a esa posición. Todo esto ocurre cada 500 ms, permitiendo ver en el Monitor Serie 
-los grados en tiempo real mientras se gira el potenciómetro.
+
 
 ## Reporte
 [Ver Reporte](Reporte/Reporte_Protocolo12C.pdf)
