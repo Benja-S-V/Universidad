@@ -44,7 +44,7 @@ distintas (0x08, 0x09 y 0x0A).
 
 ## Video del funcionamiento
 
-[Ver video](https://youtu.be/2nInlPzRGwA)
+[Ver video](https://youtu.be/b4nnuEBbE3k)
 
 ## Evidencias de armado
 
