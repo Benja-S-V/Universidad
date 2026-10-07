@@ -1,136 +1,111 @@
 # Inclinómetro con control de motorreductor
 
-Práctica 3.2.3 de Sistemas Programables (Instituto Tecnológico de Mazatlán).
+## Descripción
 
-Sistema embebido que mide la inclinación frontal (*pitch*) de un sensor MPU-6050 y la usa para controlar el sentido y la velocidad de un motorreductor mediante un puente H L298N. Corre en un **Arduino UNO R4 WiFi**.
+En esta práctica (3.2.3) se implementó un sistema embebido que mide la inclinación frontal (pitch) de un sensor MPU-6050 y la utiliza para controlar la dirección y la velocidad de un motorreductor mediante un puente H L298N, con un Arduino UNO R4 WiFi.
 
-## Video de demostración
+El signo del ángulo decide el sentido de giro y su magnitud decide la velocidad: dentro de ±5° el motor permanece detenido, y entre 5° y 45° la velocidad crece en proporción a la inclinación. El ángulo se obtiene con un filtro complementario que combina el acelerómetro y el giroscopio, y los cambios de velocidad se aplican con una rampa de aceleración.
 
-[![Ver el video en YouTube](https://img.youtube.com/vi/jAs1rPtNxxw/hqdefault.jpg)](https://youtu.be/jAs1rPtNxxw)
+El programa utiliza `millis()` y `micros()` para ejecutar cuatro tareas sin bloquear la ejecución, e incluye un paro de seguridad que detiene el motor de inmediato cuando falla la lectura del sensor y se recupera solo cuando el sensor vuelve a responder.
 
-Video completo: https://youtu.be/jAs1rPtNxxw
+## Integrantes
 
-## Características
+* Gabriel
+* Javier
+* Rosa
+* Benjamín
 
-- Lectura del MPU-6050 por I2C accediendo directamente a sus registros, **sin librerías externas** para el sensor.
-- Ángulo calculado con un **filtro complementario** (acelerómetro + giroscopio).
-- Control de sentido y velocidad con PWM, con **zona muerta**, **velocidad mínima útil** y **rampa de aceleración**.
-- **Paro de seguridad** inmediato si falla el sensor, con recuperación automática.
-- Indicador de inclinación en la **matriz de LEDs** de la placa y estado en el **Monitor Serie**.
-- Cuatro tareas periódicas con `millis()`/`micros()`, **sin `delay()`** en el ciclo principal.
+## Objetivos
 
-## Material
+* Leer el sensor MPU-6050 por I2C accediendo directamente a sus registros, sin librerías externas.
+* Calcular la inclinación frontal combinando acelerómetro y giroscopio con un filtro complementario.
+* Controlar la dirección y la velocidad de un motorreductor con un puente H L298N y una señal PWM.
+* Aplicar una zona muerta, una velocidad mínima útil y una rampa de aceleración para que el motor responda de forma suave.
+* Implementar un paro de seguridad ante fallas del sensor, con recuperación automática.
+* Mostrar la inclinación en la matriz de LEDs y el estado del sistema en el Monitor Serie.
+* Utilizar `millis()` para ejecutar varias tareas periódicas sin bloquear el programa.
 
-| Componente | Notas |
-|---|---|
-| Arduino UNO R4 WiFi | Incluye matriz de LEDs de 12×8 |
-| Módulo GY-521 (MPU-6050) | Acelerómetro y giroscopio, I2C |
-| Módulo puente H L298N | Con el jumper de ENA retirado |
-| Motorreductor DC con llanta | |
-| Fuente externa para el motor | Conectada a +12V del L298N |
-| Resistencia de 10 kΩ | Entre ENA y GND (recomendada) |
-| Cables y cable USB-C | |
+## Herramientas y material utilizado
 
-## Conexiones
+### Hardware
 
-| Señal | Arduino | Destino |
-|---|---|---|
-| ENA (PWM) | D9 | ENA del L298N |
-| IN1 | D8 | IN1 del L298N |
-| IN2 | D7 | IN2 del L298N |
-| SDA | A4 | SDA del GY-521 |
-| SCL | A5 | SCL del GY-521 |
-| VCC / GND | 5V / GND | VCC / GND del GY-521 |
-| AD0 | — | GND (fija la dirección I2C en 0x68) |
+* Arduino UNO R4 WiFi
+* Módulo GY-521 (sensor MPU-6050)
+* Módulo puente H L298N
+* Motorreductor DC con llanta
+* Fuente de alimentación externa para el motor
+* Cables de conexión
+* Cable USB-C
 
-Notas importantes:
+### Software
 
-- Retirar el jumper de **ENA** del módulo L298N para poder controlar la velocidad con PWM.
-- Alimentar el motor desde la **fuente externa**, nunca desde el pin de 5V del Arduino.
-- Unir las tierras de la fuente, del L298N y del Arduino (**tierra común**).
-- La resistencia de 10 kΩ entre ENA y GND mantiene el motor deshabilitado mientras el Arduino arranca o se reinicia.
+* Arduino IDE
+* Librería `Wire`
+* Librería `Arduino_LED_Matrix`
+* Monitor Serie
 
-### Diagrama de conexión
+## Diagrama
 
-![Diagrama de conexión del sensor, el puente H y el motorreductor](Diagrama.jpeg)
+El sensor se comunica con el Arduino mediante el bus I2C y el puente H recibe tres señales: una PWM para la velocidad y dos digitales para la dirección.
 
-### Montaje físico
+| MPU-6050 (GY-521) | Arduino UNO R4 WiFi |
+| ----------------- | ------------------- |
+| VCC               | 5V                  |
+| GND               | GND                 |
+| SDA               | SDA (A4)            |
+| SCL               | SCL (A5)            |
 
-![Montaje físico con el Arduino, el puente H L298N y el motorreductor](Armado.jpg)
+| L298N       | Conexión                                      |
+| ----------- | --------------------------------------------- |
+| ENA         | D9 (PWM), sin el jumper de ENA                |
+| IN1         | D8                                            |
+| IN2         | D7                                            |
+| OUT1 y OUT2 | Motorreductor                                 |
+| +12V        | Positivo de la alimentación del motor         |
+| GND         | Negativo de la alimentación y GND del Arduino |
 
-## Uso
+El encabezado del código recomienda además conectar el pin AD0 del sensor a GND (dirección `0x68`) y una resistencia de 10 kΩ entre ENA y GND, que mantiene el motor deshabilitado mientras el Arduino arranca o se reinicia.
 
-1. Armar el circuito según la tabla de conexiones.
-2. Abrir el programa en el **Arduino IDE** y seleccionar la placa *Arduino UNO R4 WiFi*.
-3. Cargar el programa.
-4. Abrir el **Monitor Serie** a **115200 baudios**.
-5. Mantener el sensor **quieto durante unos 5 segundos** mientras se calibra el giroscopio (500 muestras).
-6. Cuando aparezca "Sistema listo", inclinar el sensor hacia adelante y hacia atrás.
+![Diagrama de conexión](Diagrama/Diagrama.jpeg)
 
-Librerías utilizadas (incluidas con el entorno de la placa): `Wire` y `Arduino_LED_Matrix`.
+![Armado](Diagrama/Armado.jpg)
 
-## Cómo funciona
+[Ver carpeta Diagrama](Diagrama)
 
-El motor responde al ángulo de inclinación así:
+## Código
 
-| Inclinación \|θ\| | Comportamiento |
-|---|---|
-| Menor a 5° | Motor detenido (zona muerta) |
-| De 5° a 45° | PWM crece linealmente de 90 a 255 |
-| 45° o más | PWM máximo (255) |
+Lo primero que hace el programa es dejar apagadas las salidas del motor. Después lee el registro `WHO_AM_I` para comprobar que el sensor responde `0x68`, lo configura con rangos de ±2 g y ±250 °/s, calibra el giroscopio con 500 muestras en reposo y calcula el ángulo inicial con el acelerómetro.
 
-- El **signo** del ángulo define el sentido: positivo es adelante, negativo es reversa.
-- Se usa un PWM mínimo de 90 porque con valores menores el motor no vence la fricción de sus engranes.
-- La **rampa** cambia el PWM en pasos de 9 cada 20 ms (de 0 a 255 en unos 0.58 s). Al invertir el giro, el motor baja primero hasta cero y luego acelera en el otro sentido.
+En el `loop()` se ejecutan cuatro tareas controladas con `millis()`: la lectura del sensor y el filtro cada 10 ms, la rampa y el motor cada 20 ms, el Monitor Serie cada 500 ms y la matriz de LEDs cada 50 ms. Si la lectura del sensor falla, el motor se detiene sin rampa, la matriz muestra una X y el programa intenta reconectar el sensor cada 250 ms.
 
-### Filtro complementario
+[Ver código Inclinometro_Motor.ino](Codigo/Inclinometro_Motor.ino)
 
-```
-ángulo = α · (ángulo + giro · dt) + (1 − α) · ángulo_acelerómetro
-```
+[Ver carpeta Código](Codigo)
 
-Con α = τ / (τ + dt) y τ = 0.5 s, que a 100 muestras por segundo da α ≈ 0.98. El giroscopio aporta la respuesta rápida y el acelerómetro corrige su deriva.
+## Reporte
 
-### Tareas periódicas
+En el reporte se explica el cálculo del ángulo con el filtro complementario, el control del motor con el puente H y PWM, la zona muerta, la rampa de aceleración, el paro de seguridad y la temporización con `millis()`. También incluye las pruebas realizadas y las respuestas a las preguntas de análisis.
 
-| Tarea | Periodo |
-|---|---|
-| Lectura del sensor y filtro | 10 ms |
-| Rampa y control del motor | 20 ms |
-| Matriz de LEDs | 50 ms |
-| Monitor Serie | 500 ms |
-
-### Estados del sistema
-
-| Estado | Descripción |
-|---|---|
-| `BLOQUEADO` | El sensor no responde o falla la calibración al arrancar. Motor apagado; hay que revisar conexiones y pulsar RESET |
-| `ACTIVO` | Operación normal |
-| `PARO` | Falló una lectura o el intervalo entre lecturas superó 0.1 s. Motor detenido al instante; reintenta cada 250 ms |
-| `RECUPERANDO` | El sensor volvió a responder; espera 100 ms y retoma el control conservando la calibración |
-
-## Indicadores
-
-**Matriz de LEDs**
-
-- Marco completo: inclinación dentro de ±2°.
-- Punto de 2×2 LEDs que sube o baja con el ángulo (llega al borde a 45°).
-- X: sistema en paro o con falla inicial.
-
-**Monitor Serie** (solo imprime cuando algo cambia). Ejemplo:
-
-```
-Inclinacion: adelante | 10 grados | leve | Motor: adelante | PWM: 44 %
-Inclinacion: atras | -59 grados | fuerte | Motor: reversa | PWM: 74 %
-Inclinacion: atras | -60 grados | fuerte | Motor: reversa | PWM: 100 %
-```
-
-La intensidad se clasifica como *leve* (menos de 15°), *moderada* (menos de 30°) o *fuerte*.
+[Ver reporte](Reporte/Reporte.pdf)
 
 ## Resultados
 
-![Monitor Serie mostrando la inclinación y el estado del motor](Terminal.jpg)
+En el Monitor Serie se observa la inclinación con su dirección, grados e intensidad, junto con el sentido de giro del motor y el porcentaje de PWM. En la prueba, con 10° hacia adelante el motor giró hacia adelante al 44 %, y con inclinaciones de alrededor de 60° hacia atrás giró en reversa al 100 %.
 
-- A 10° hacia adelante el motor giró con 44 % de PWM, igual al valor calculado: (10 − 5) / (45 − 5) = 0.125 y 90 + 0.125 × 165 ≈ 111, que es 44 % de 255.
-- Al inclinar hacia atrás se observa la rampa: en −21° el motor todavía giraba hacia adelante con 12 % (frenando antes de invertir) y en −59° ya iba en reversa al 74 %.
-- Entre −59° y −64° el PWM se mantuvo en 100 %, lo que confirma la saturación a partir
+![Resultados Terminal](Diagrama/Terminal.jpg)
+
+## Video
+
+En el siguiente video se muestra el funcionamiento del inclinómetro y la respuesta del motorreductor al inclinar el sensor.
+
+[Ver video de la práctica](https://youtu.be/jAs1rPtNxxw)
+
+[Ver carpeta Video](Video)
+
+## Conclusiones
+
+La práctica permitió comprender cómo se obtiene un ángulo de inclinación estable combinando dos sensores con errores distintos: el acelerómetro, que es exacto en reposo pero ruidoso con el movimiento, y el giroscopio, que es suave pero se desvía con el tiempo.
+
+También se comprendió que controlar un motor no consiste solo en enviarle una velocidad: la zona muerta, la velocidad mínima y la rampa de aceleración son necesarias para que el motor no vibre, arranque de verdad y no sufra cambios bruscos.
+
+Finalmente, el paro de seguridad mostró un principio importante de los sistemas de control: cuando no se tiene información confiable del sensor, lo seguro es detener el actuador, y el uso de `millis()` permite que esa reacción ocurra de inmediato porque ninguna tarea bloquea a las demás.
