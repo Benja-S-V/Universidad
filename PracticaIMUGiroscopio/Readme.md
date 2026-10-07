@@ -4,6 +4,12 @@ Práctica 3.2.3 de Sistemas Programables (Instituto Tecnológico de Mazatlán).
 
 Sistema embebido que mide la inclinación frontal (*pitch*) de un sensor MPU-6050 y la usa para controlar el sentido y la velocidad de un motorreductor mediante un puente H L298N. Corre en un **Arduino UNO R4 WiFi**.
 
+## Video de demostración
+
+[![Ver el video en YouTube](https://img.youtube.com/vi/jAs1rPtNxxw/hqdefault.jpg)](https://youtu.be/jAs1rPtNxxw)
+
+Video completo: https://youtu.be/jAs1rPtNxxw
+
 ## Características
 
 - Lectura del MPU-6050 por I2C accediendo directamente a sus registros, **sin librerías externas** para el sensor.
@@ -43,6 +49,14 @@ Notas importantes:
 - Alimentar el motor desde la **fuente externa**, nunca desde el pin de 5V del Arduino.
 - Unir las tierras de la fuente, del L298N y del Arduino (**tierra común**).
 - La resistencia de 10 kΩ entre ENA y GND mantiene el motor deshabilitado mientras el Arduino arranca o se reinicia.
+
+### Diagrama de conexión
+
+![Diagrama de conexión del sensor, el puente H y el motorreductor](Diagrama.jpeg)
+
+### Montaje físico
+
+![Montaje físico con el Arduino, el puente H L298N y el motorreductor](Armado.jpg)
 
 ## Uso
 
@@ -113,27 +127,10 @@ Inclinacion: atras | -60 grados | fuerte | Motor: reversa | PWM: 100 %
 
 La intensidad se clasifica como *leve* (menos de 15°), *moderada* (menos de 30°) o *fuerte*.
 
-## Parámetros configurables
+## Resultados
 
-Están al inicio del programa como constantes:
+![Monitor Serie mostrando la inclinación y el estado del motor](Terminal.jpg)
 
-| Constante | Valor | Descripción |
-|---|---|---|
-| `ZONA_MUERTA` | 5° | Rango donde el motor no se mueve |
-| `ANGULO_MAXIMO` | 45° | Ángulo desde el que el PWM es máximo |
-| `PWM_MINIMO` / `PWM_MAXIMO` | 90 / 255 | Velocidad mínima y máxima |
-| `PASO_RAMPA` | 9 | Cambio de PWM cada 20 ms |
-| `TAU_FILTRO` | 0.5 s | Constante de tiempo del filtro |
-| `SENTIDO_PITCH` | 1.0 | Cambiar a `-1.0f` si el sentido queda invertido |
-
-## Solución de problemas
-
-- **"ERROR INICIAL: MPU-6050 no responde":** revisar SDA/SCL, la alimentación del sensor y que AD0 esté a GND. Pulsar RESET.
-- **El motor gira al revés:** cambiar `SENTIDO_PITCH` a `-1.0f` o intercambiar los cables del motor en OUT1 y OUT2.
-- **El motor no gira con inclinaciones pequeñas:** es normal dentro de la zona muerta (menos de 5°).
-- **El motor se mueve solo al arrancar:** verificar la resistencia de 10 kΩ entre ENA y GND y la tierra común.
-- **Aparece "PARO DE SEGURIDAD":** hay una falla de lectura del sensor, normalmente un cable suelto. El sistema se recupera solo cuando el sensor vuelve a responder.
-
-## Aplicaciones
-
-Vehículos autobalanceados, estabilizadores de cámara (gimbals) y controles por inclinación.
+- A 10° hacia adelante el motor giró con 44 % de PWM, igual al valor calculado: (10 − 5) / (45 − 5) = 0.125 y 90 + 0.125 × 165 ≈ 111, que es 44 % de 255.
+- Al inclinar hacia atrás se observa la rampa: en −21° el motor todavía giraba hacia adelante con 12 % (frenando antes de invertir) y en −59° ya iba en reversa al 74 %.
+- Entre −59° y −64° el PWM se mantuvo en 100 %, lo que confirma la saturación a partir
