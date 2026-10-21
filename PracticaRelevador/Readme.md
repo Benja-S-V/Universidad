@@ -117,7 +117,7 @@ En el Monitor Serie (115200 baudios) cada orden responde con un mensaje, por eje
 
 En el siguiente video se muestra el control del motor y del LED desde el Monitor Serie y las pruebas de seguridad.
 
-[Ver video de la práctica](https://youtu.be/)
+[Ver video de la práctica](https://youtube.com/shorts/0-JmM2MyYfA)
 
 [Ver carpeta Video](Video)
 
