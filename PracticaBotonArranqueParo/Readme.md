@@ -208,7 +208,9 @@ También ayudan los cables gruesos y cortos y las conexiones firmes, porque los 
 
 En el reporte se explica el filtro de rebotes de la clase `Boton`, la detección del flanco de bajada, el arranque seguro, la rampa de PWM y las pruebas realizadas en la simulación, junto con las respuestas a las preguntas de reflexión.
 
-[Ver reporte](Reporte/Reporte.pdf)
+[Ver reporte](Reporte/Reporte_Resultados_Preguntas.pdf)
+
+[Ver reporte de resultados](Resultados/Reporte_Resultados_Boton.pdf)
 
 ## Video
 
